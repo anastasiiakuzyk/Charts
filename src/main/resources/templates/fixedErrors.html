@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="ISO-8859-1"/>
+    <link th:rel="stylesheet"
+          th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+
+    <link th:rel="stylesheet"
+          th:href="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css}"/>
+    <title>Page</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: auto;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js}"></script>
+<script th:src="@{https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+<script th:src="@{https://code.highcharts.com/highcharts.js}"></script>
+<script th:src="@{https://code.jscharting.com/latest/jscharting.js}"></script>
+
+<div th:each="errorsOfRegion : ${errorsWithFixed}">
+    <button type="button" data-toggle="collapse"
+            th:attr="data-target='#accordion_'+${errorsOfRegion.entrySet().iterator().next().key.region.replace(' ', '').replace('+','')}"
+            th:text="${errorsOfRegion.entrySet().iterator().next().key.region}">
+    </button>
+    <!--    <table -->
+    <table class="collapse"
+           th:id="'accordion_'+${errorsOfRegion.entrySet().iterator().next().key.region.replace(' ', '').replace('+','')}">
+        <thead>
+
+        <tr>
+            <th colspan="7">with error</th>
+            <th colspan="7">fixed</th>
+        </tr>
+        <tr>
+            <th>year</th>
+            <th>month</th>
+            <th>day</th>
+            <th>time</th>
+            <th>temp</th>
+            <th>windDir</th>
+            <th>windSpeed</th>
+            <th>year</th>
+            <th>month</th>
+            <th>day</th>
+            <th>time</th>
+            <th>temp</th>
+            <th>windDir</th>
+            <th>windSpeed</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="error : ${errorsOfRegion}">
+            <td th:text="${error.key.year}" th:style="${error.key.year != error.value.year} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.month}" th:style="${error.key.month != error.value.month} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.day}" th:style="${error.key.day != error.value.day} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.time}" th:style="${error.key.time != error.value.time} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.temperature}" th:style="${error.key.temperature != error.value.temperature} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.windDirection}" th:style="${error.key.windDirection != error.value.windDirection} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.key.windSpeed}" th:style="${error.key.windSpeed != error.value.windSpeed} ? 'background: red' : 'background: transparent'"></td>
+            <td th:text="${error.value.year}" th:style="${error.key.year != error.value.year} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.month}" th:style="${error.key.month != error.value.month} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.day}" th:style="${error.key.day != error.value.day} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.time}" th:style="${error.key.time != error.value.time} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.temperature}" th:style="${error.key.temperature != error.value.temperature} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.windDirection}" th:style="${error.key.windDirection != error.value.windDirection} ? 'background: green' : 'background: transparent'"></td>
+            <td th:text="${error.value.windSpeed}" th:style="${error.key.windSpeed != error.value.windSpeed} ? 'background: green' : 'background: transparent'"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
