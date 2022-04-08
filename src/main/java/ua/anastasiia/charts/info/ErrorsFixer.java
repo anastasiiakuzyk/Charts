@@ -18,7 +18,6 @@ public abstract class ErrorsFixer {
 
     public abstract List<Columns> getErrors();
 
-
     public String errorsToString() {
         List<Columns> errors = getErrors();
         String message = getClass().getSimpleName() + " is not correct:";
@@ -45,17 +44,14 @@ public abstract class ErrorsFixer {
         return fixedRows;
     }
 
-    protected abstract void getY(List<Columns> list, double[] y, int i);
+    protected abstract double[] getY(List<Columns> list);
 
     public DataSet interpolation() {
         List<Columns> list = new ArrayList<>(infoList);
         List<Columns> errors = getErrors();
         list.removeAll(errors);
-        double[] y = new double[infoList.size() - errors.size()];
-        for (int i = 0; i < y.length; i++) {
-            getY(list, y, i);
-        }
-        double[] x = new double[infoList.size() - errors.size()];
+        double[] y = getY(list);
+        double[] x = new double[list.size()];
         for (int i = 0; i < x.length; i++) {
             x[i] = list.get(i).getDayTime();
         }

@@ -15,24 +15,6 @@ import java.util.Map;
 @Controller
 public class GraphController {
 
-    @GetMapping("/displayBarGraph")
-    public String barGraph(Model model) {
-        Map<String, Integer> surveyMap = new LinkedHashMap<>();
-        surveyMap.put("Java", 40);
-        surveyMap.put("Dev oops", 25);
-        surveyMap.put("Python", 20);
-        surveyMap.put(".Net", 15);
-        String str = "2017,2\n" +
-                "2018,2\n" +
-                "2019,3\n" +
-                "2020,3\n" +
-                "2021,2\n" +
-                "2022,3";
-        model.addAttribute("surveyMap", surveyMap);
-        model.addAttribute("str", str);
-        return "barGraph";
-    }
-
     @GetMapping("/displayFixedErrors")
     public String fixedErrors(Model model) {
 

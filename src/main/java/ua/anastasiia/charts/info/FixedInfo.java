@@ -43,9 +43,10 @@ public class FixedInfo {
             Temperature temperature = new Temperature(infoList);
             Time time = new Time(infoList);
             Wind wind = new Wind(infoList);
+            WindSpeed windSpeed = new WindSpeed(infoList);
 
             boolean edited = false;
-            ErrorsFixer[] fixers = {time, temperature, wind};
+            ErrorsFixer[] fixers = {time, temperature, wind, windSpeed};
             for (ErrorsFixer fixer : fixers) {
                 List<Columns> errors = fixer.getErrors();
                 List<Columns> errorsForMap = new ArrayList<>();

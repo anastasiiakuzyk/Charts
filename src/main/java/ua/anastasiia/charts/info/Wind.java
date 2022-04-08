@@ -20,8 +20,12 @@ public class Wind extends ErrorsFixer {
         return errors;
     }
 
-    protected void getY(List<Columns> list, double[] y, int i) {
-        y[i] = directionToIndex(list.get(i));
+    protected double[] getY(List<Columns> list) {
+        double[] y = new double[list.size()];
+        for (int i = 0; i < y.length; i++) {
+            y[i] = directionToIndex(list.get(i));
+        }
+        return y;
     }
 
     protected void changeToInterpolated(DataSet set, Columns row, int j) {

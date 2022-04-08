@@ -11,20 +11,27 @@
 
 </head>
 <body>
-<div class="container">
-    <h2 align="center">Technology Line Graph</h2>
-    <div id="lineChart"></div>
-</div>
+<div id="lineChart"></div>
+<div id="barChartTemp"></div>
+<div id="windRose" style="max-width: 500px;height: 560px;margin: 0px auto;"></div>
+<div id="barChartWind"></div>
 <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!-- Latest compiled and minified JavaScript -->
 <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.jscharting.com/latest/jscharting.js"></script>
+<script type="text/javascript" src="https://code.jscharting.com/latest/modules/types.js"></script>
+
 <script th:inline="javascript">
     $(function () {
         lineChart();
+        barChartTemp();
+        var wind = [[${dataForWindRose}]];
+        let data = JSC.csv2Json(wind);
+        windRose(data);
+        barChartWind();
     });
 
     function getData() {
@@ -37,19 +44,129 @@
         return arr;
     }
 
-    data = getData();
-
     function lineChart() {
         Highcharts.chart('lineChart', {
+            chart: {
+                type: 'line',
+                zoomType: 'x'
+            },
             xAxis: {
                 type: 'datetime',
             },
 
             series: [{
-                data: data,
+                data: getData(),
                 lineWidth: 0.5,
             }]
 
+        });
+    }
+
+    function barChartTemp() {
+        Highcharts.chart('barChartTemp', {
+            chart: {
+                type: 'column'
+            },
+            xAxis: {
+                categories: [[${countTemps.keySet()}]],
+                crosshair: true
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f} hours</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            series: [{
+                data: [[${countTemps.values()}]]
+            }]
+        });
+    }
+
+    function barChartWind() {
+        Highcharts.chart('barChartWind', {
+            chart: {
+                type: 'column'
+            },
+            xAxis: {
+                categories: [[${countWindSpeeds.keySet()}]],
+                crosshair: true
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f} hours</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            series: [{
+                data: [[${countWindSpeeds.values()}]]
+            }]
+        });
+    }
+
+    function windRose(data) {
+        var percentsCalm = [[${percentsCalm}]];
+        var avgSpeed = [[${avgSpeed}]];
+        return JSC.chart('windRose', {
+            debug: true,
+            type: 'radar column',
+            animation_duration: 1000,
+            title: {label_text: 'Wind Rose Chart', position: 'center'},
+            legend: {
+                title_label_text: 'Wind Speed (in mps)',
+                position: 'bottom',
+                template: '%icon %name',
+                reversed: true
+            },
+            annotations: [
+                {
+                    label: {
+                        text: 'Calm: '+percentsCalm+'%<br>Avg speed: '+avgSpeed+' mps',
+                        style_fontSize: 14
+                    },
+                    position: 'inside bottom right'
+                }
+            ],
+            defaultSeries_shape_padding: 0.02,
+            yAxis: {
+                defaultTick_label_text: '%value%',
+                scale: {type: 'stacked'},
+                alternateGridFill: 'none'
+            },
+            xAxis: {
+                scale: {range: [0, 360], interval: 45},
+                customTicks: [
+                    {value: 360, label_text: 'N'},
+                    {value: 45, label_text: 'NE'},
+                    {value: 90, label_text: 'E'},
+                    {value: 135, label_text: 'SE'},
+                    {value: 180, label_text: 'S'},
+                    {value: 225, label_text: 'SW'},
+                    {value: 270, label_text: 'W'},
+                    {value: 315, label_text: 'NW'}
+                ]
+            },
+            palette: [
+                '#c62828',
+                '#ff7043',
+                '#fff176',
+                '#aed581',
+                '#80cbc4',
+                '#bbdefb'
+            ],
+            defaultPoint: {
+                tooltip: '<b>%seriesName</b> %xValue\xb0 %yValue%'
+            },
+            series: JSC.nest()
+                .key('speed')
+                .key('angle')
+                .rollup('percent')
+                .series(data)
+                .reverse()
         });
     }
 </script>
