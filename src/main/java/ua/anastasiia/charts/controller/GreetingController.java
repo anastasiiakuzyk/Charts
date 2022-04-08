@@ -10,6 +10,7 @@ import ua.anastasiia.charts.info.RegionSelect;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -40,7 +41,7 @@ public class GreetingController {
         List<Double> temps = new ArrayList<>();
         for (Columns row : selectedFull) {
             LocalDateTime date = row.getDate();
-            ZonedDateTime zdt = date.atZone(ZoneId.systemDefault());
+            ZonedDateTime zdt = date.atZone(ZoneOffset.UTC);
             long milli = zdt.toInstant().toEpochMilli();
             datesMil.add(milli);
             temps.add(row.getTemperature());

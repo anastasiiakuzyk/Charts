@@ -68,7 +68,6 @@ public class FixedInfo {
             } else {
                 infoByRegion.addAll(infoList);
             }
-            //todo
             if (month == 12) {
                 allInfo.add(infoByRegion);
                 TreeMap<Columns, Columns> sortedErrorsByRegion = new TreeMap<>(errorsByRegion);
