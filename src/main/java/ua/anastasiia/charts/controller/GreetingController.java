@@ -22,7 +22,7 @@ public class GreetingController {
     @GetMapping("/displayFixedErrors")
     public String fixedErrors(Model model) {
 
-        FixedInfo.processInfo(Paths.getFilesPaths(mainDirectory));
+        FixedInfo.processInfoOptimised(Paths.getFilesPaths(mainDirectory));
         List<Map<Columns, Columns>> errorsWithFixed = FixedInfo.getErrorsWithFixed();
         String[] regions = new String[errorsWithFixed.size()];
         for (int i = 0; i < regions.length; i++) {

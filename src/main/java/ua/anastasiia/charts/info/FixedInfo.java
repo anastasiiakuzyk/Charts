@@ -16,25 +16,31 @@ public class FixedInfo {
     }
 
     public static List<List<Columns>> getAllProcessedInfo(String mainDirectory) {
+        processInfoOptimised(Paths.getFilesPaths(mainDirectory));
+        return allInfo;
+    }
+
+    public static void processInfoOptimised(String[] filesPaths){
         File file = new File("allInfo.dat");
         if (!file.exists()) {
             try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
-                processInfo(Paths.getFilesPaths(mainDirectory));
+                processInfo(filesPaths);
                 out.writeObject(allInfo);
+                out.writeObject(errorsWithFixed);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         } else {
             try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
                 allInfo = (List<List<Columns>>) in.readObject();
+                errorsWithFixed = (List<Map<Columns, Columns>>) in.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
-        return allInfo;
     }
 
-    public static void processInfo(String[] filesPaths) {
+    private static void processInfo(String[] filesPaths) {
         allInfo = new ArrayList<>();
         errorsWithFixed = new ArrayList<>();
 
