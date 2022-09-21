@@ -21,7 +21,7 @@ public class WindSpeed extends ErrorsFixer {
 
     public void edit(List<Columns> errors) {
         for (int i = 1; i < infoList.size(); i++) {
-            if (infoList.get(i).getWindSpeed()<0) {
+            if (infoList.get(i).getWindSpeed() < 0) {
                 infoList.get(i).setWindSpeed(Math.abs(infoList.get(i).getWindSpeed()));
             }
         }
@@ -34,6 +34,7 @@ public class WindSpeed extends ErrorsFixer {
     }
 
     @Override
-    protected void changeToInterpolated(DataSet set, Columns row, int j) {}
+    protected void changeToInterpolated(DataSet set, Columns row, int j) {
+    }
 
 }

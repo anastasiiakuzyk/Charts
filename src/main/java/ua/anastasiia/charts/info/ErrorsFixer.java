@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class ErrorsFixer {
-    List<Columns> infoList;
     static List<Columns> completedList;
+    List<Columns> infoList;
 
     public ErrorsFixer(List<Columns> infoList) {
         this.infoList = infoList;

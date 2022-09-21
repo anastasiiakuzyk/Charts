@@ -13,11 +13,11 @@ public class WindRose {
     List<Integer> angles;
     List<String> speedsRanges;
     List<Double> speeds;
+    List<Double> percents;
+    Double percentsCalm;
     private int calmTimes;
     private double maxSpeed;
     private double avgSpeed;
-    List<Double> percents;
-    Double percentsCalm;
 
     public WindRose(List<Columns> info) {
         this.info = info;
@@ -96,8 +96,6 @@ public class WindRose {
         String windSpeed = "";
 
         int[] ranges = {0, 3, 4, 5, 7};
-//        double[] ranges = {maxSpeed * 0.01, maxSpeed * 0.25, maxSpeed * 0.5, maxSpeed * 0.75, maxSpeed};
-
         if (curSpeed >= ranges[0] && curSpeed < ranges[1]) {
             windSpeed = ranges[0] + " - " + ranges[1];
         } else if (curSpeed >= ranges[1] && curSpeed < ranges[2]) {

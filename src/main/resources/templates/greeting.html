@@ -1,19 +1,52 @@
 <!DOCTYPE HTML>
 <html xmlns:th="https://www.thymeleaf.org" lang="en">
 <head>
-    <title>Getting Started: Handling Form Submission</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body>
+<style>
+    select {
+        width: 100%;
+
+        padding: 16px;
+        /*20px;*/
+        border: none;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+    }
+
+    input[type=button], input[type=submit], input[type=reset] {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 16px 32px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+
+    input[type=datetime-local] {
+        width: 100%;
+        padding: 16px;
+        /*20px;*/
+        border: none;
+        border-radius: 4px;
+        background-color: #f1f1f1;
+    }
+</style>
+<body style="display: flex; align-items: center; justify-content: center">
 
 <form action="#" th:action="@{/greeting}" th:object="${select}" method="post" id="region">
+    Оберіть регіон:
     <select th:field="*{region}" form="region">
         <option th:each="i : ${options}" th:value="${i}" th:text="${i}">
         </option>
     </select>
-    <p>Start: <input type=datetime-local th:field="*{start}" min="2012-01-01T00:00" max="2012-12-31T23:00"/></p>
-    <p>End: <input type=datetime-local th:field="*{end}" min="2012-01-01T00:30" max="2012-12-31T23:30"/></p>
-    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/></p>
+    <p style="color: red" th:text="${error} ? 'Введено не корректний проміжок, спробуйте ще раз!' :''"></p>
+    <p>Оберіть дату початку проміжку:<input type=datetime-local th:field="*{start}" min="2012-01-01T00:00"
+                                            max="2012-12-31T23:00"/></p>
+    <p>Оберіть дату кінця проміжку:<input type=datetime-local th:field="*{end}" min="2012-01-01T00:30"
+                                          max="2012-12-31T23:30"/></p>
+    <p><input type="submit" value="Підтвердити"/> <input type="reset" value="Витерти"/></p>
 </form>
 
 </body>

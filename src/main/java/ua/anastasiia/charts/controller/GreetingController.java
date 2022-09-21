@@ -5,41 +5,58 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.anastasiia.charts.info.Columns;
-import ua.anastasiia.charts.info.RegionSelect;
-import ua.anastasiia.charts.info.WindRose;
+import ua.anastasiia.charts.info.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static ua.anastasiia.charts.info.FixedInfo.getAllProcessedInfo;
 
 @Controller
 public class GreetingController {
+    static String mainDirectory = "БАЗА РЕГІОНІВ";
+    static List<List<Columns>> allInfo = FixedInfo.getAllProcessedInfo(mainDirectory);;
 
-    List<List<Columns>> allInfo = getAllProcessedInfo("БАЗА РЕГІОНІВ1");
+    @GetMapping("/displayFixedErrors")
+    public String fixedErrors(Model model) {
+
+        FixedInfo.processInfo(Paths.getFilesPaths(mainDirectory));
+        List<Map<Columns, Columns>> errorsWithFixed = FixedInfo.getErrorsWithFixed();
+        String[] regions = new String[errorsWithFixed.size()];
+        for (int i = 0; i < regions.length; i++) {
+            regions[i] = errorsWithFixed.get(i).values().toArray(new Columns[0])[0].getRegion();
+        }
+
+        model.addAttribute("errorsWithFixed", errorsWithFixed);
+        model.addAttribute("namesOfRegions", regions);
+        return "fixedErrors";
+    }
+
 
     @GetMapping("/greeting")
-    public String greetingForm(Model model) {
+    public String greetingForm(Model model, boolean error) {
         List<String> options = new ArrayList<>();
         for (List<Columns> info : allInfo) {
             options.add(info.get(0).getRegion());
         }
 
-        model.addAttribute("select", new RegionSelect());
+        RegionSelect select = new RegionSelect();
+
+        model.addAttribute("select", select);
+        model.addAttribute("error", error);
         model.addAttribute("options", options);
         return "greeting";
     }
 
     @PostMapping("/greeting")
     public String greetingSubmit(@ModelAttribute RegionSelect selected, Model model) {
-        selected.setSelected(allInfo);
+
+        boolean isSelected = selected.setSelected(allInfo);
+        if (!isSelected) {
+            return greetingForm(model, true);
+        }
         List<Columns> selectedFull = selected.getSelected();
         List<Long> datesMil = new ArrayList<>();
         List<Double> temps = new ArrayList<>();
@@ -77,6 +94,12 @@ public class GreetingController {
         String dataForWindRose = windRose.getData();
         Double percentsCalm = windRose.getPercentsCalm();
         double avgSpeed = windRose.getAvgSpeed();
+
+
+        model.addAttribute("region", selected.getRegion());
+        model.addAttribute("start", selected.getStart());
+        model.addAttribute("end", selected.getEnd());
+
         model.addAttribute("datesArray", datesMilArray);
         model.addAttribute("dataForWindRose", dataForWindRose);
         model.addAttribute("percentsCalm", percentsCalm);

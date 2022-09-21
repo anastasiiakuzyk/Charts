@@ -42,8 +42,13 @@ public class RegionSelect {
         return selected;
     }
 
-    public void setSelected(List<List<Columns>> allInfo) {
+    public boolean setSelected(List<List<Columns>> allInfo) {
         selected = new ArrayList<>();
+
+        if (start == null || end == null) {
+            return false;
+        }
+
         for (List<Columns> infoOfRegion : allInfo) {
             if (region.equals(infoOfRegion.get(0).getRegion())) {
                 for (Columns info : infoOfRegion) {
@@ -54,5 +59,9 @@ public class RegionSelect {
                 }
             }
         }
+        if (selected.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }

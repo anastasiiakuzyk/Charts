@@ -1,16 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="ISO-8859-1"/>
+    <meta charset="UTF-8"/>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
 
     <!-- Optional theme -->
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
+    <title></title>
 
 </head>
+<style>
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+</style>
 <body>
+<div th:text="'Графіки та діаграми у регіоні ' + ${region}"></div>
+<div th:text="'За період з ' + ${start} + ' по ' + ${end}"></div>
 <div id="lineChart"></div>
 <div id="barChartTemp"></div>
 <div id="windRose" style="max-width: 500px;height: 560px;margin: 0px auto;"></div>
@@ -50,13 +61,26 @@
                 type: 'line',
                 zoomType: 'x'
             },
+            title: {
+                text: 'Графік температурних умов регіону'
+            },
             xAxis: {
                 type: 'datetime',
+                title: {
+                    text: 'Дата'
+                }
+            },
+            yAxis: {
+
+                title: {
+                    text: 'T - °C'
+                }
             },
 
             series: [{
                 data: getData(),
                 lineWidth: 0.5,
+                name: ''
             }]
 
         });
@@ -67,9 +91,21 @@
             chart: {
                 type: 'column'
             },
+            title: {
+                text: 'Діаграма тривалості температурних режимів'
+            },
             xAxis: {
                 categories: [[${countTemps.keySet()}]],
-                crosshair: true
+                crosshair: true,
+
+                title: {
+                    text: 'T - °C'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'час, год'
+                }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -80,7 +116,8 @@
                 useHTML: true
             },
             series: [{
-                data: [[${countTemps.values()}]]
+                data: [[${countTemps.values()}]],
+                name: ''
             }]
         });
     }
@@ -90,9 +127,20 @@
             chart: {
                 type: 'column'
             },
+            title: {
+                text: 'Діаграма тривалості режимів вітрової активності'
+            },
             xAxis: {
                 categories: [[${countWindSpeeds.keySet()}]],
-                crosshair: true
+                crosshair: true,
+                title: {
+                    text: 'м/с'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'час, год'
+                }
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -103,7 +151,8 @@
                 useHTML: true
             },
             series: [{
-                data: [[${countWindSpeeds.values()}]]
+                data: [[${countWindSpeeds.values()}]],
+                name: ''
             }]
         });
     }
@@ -115,9 +164,9 @@
             debug: true,
             type: 'radar column',
             animation_duration: 1000,
-            title: {label_text: 'Wind Rose Chart', position: 'center'},
+            title: {label_text: 'Троянда вітрів', position: 'center'},
             legend: {
-                title_label_text: 'Wind Speed (in mps)',
+                title_label_text: 'Швидкість вітру (у м/с)',
                 position: 'bottom',
                 template: '%icon %name',
                 reversed: true
@@ -125,7 +174,7 @@
             annotations: [
                 {
                     label: {
-                        text: 'Calm: '+percentsCalm+'%<br>Avg speed: '+avgSpeed+' mps',
+                        text: 'Штиль: ' + percentsCalm + '%<br>Середня швидкість: ' + avgSpeed + ' м/c',
                         style_fontSize: 14
                     },
                     position: 'inside bottom right'
@@ -166,7 +215,7 @@
                 .key('angle')
                 .rollup('percent')
                 .series(data)
-                .reverse()
+                .reverse(),
         });
     }
 </script>

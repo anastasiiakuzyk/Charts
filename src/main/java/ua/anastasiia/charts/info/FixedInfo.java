@@ -1,20 +1,11 @@
 package ua.anastasiia.charts.info;
 
+import java.io.*;
 import java.util.*;
 
 public class FixedInfo {
-    static List<Map<Columns, Columns>> errorsWithFixed;
-    static List<List<Columns>> allInfo = new ArrayList<>();
-
-
-    public static void main(String[] args) {
-        String mainDirectory = "БАЗА РЕГІОНІВ";
-        FixedInfo.processInfo(Paths.getFilesPaths(mainDirectory));
-        List<Map<Columns, Columns>> errorsWithFixed = FixedInfo.getErrorsWithFixed();
-        for (Map<Columns, Columns> errorsOfRegion : errorsWithFixed) {
-            System.out.println(Arrays.toString(errorsOfRegion.entrySet().toArray()));
-        }
-    }
+    private static List<Map<Columns, Columns>> errorsWithFixed;
+    private static List<List<Columns>> allInfo = new ArrayList<>();
 
     public static List<Map<Columns, Columns>> getErrorsWithFixed() {
         return errorsWithFixed;
@@ -25,7 +16,21 @@ public class FixedInfo {
     }
 
     public static List<List<Columns>> getAllProcessedInfo(String mainDirectory) {
-        processInfo(Paths.getFilesPaths(mainDirectory));
+        File file = new File("allInfo.dat");
+        if (!file.exists()) {
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+                processInfo(Paths.getFilesPaths(mainDirectory));
+                out.writeObject(allInfo);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+                allInfo = (List<List<Columns>>) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return allInfo;
     }
 

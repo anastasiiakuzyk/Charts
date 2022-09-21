@@ -19,10 +19,6 @@ public class DataSet {
         this.y = y;
     }
 
-    public void setInX(double[] inX) {
-        this.inX = inX;
-    }
-
     public double[] getX() {
         return x;
     }
@@ -33,6 +29,10 @@ public class DataSet {
 
     public double[] getInX() {
         return inX;
+    }
+
+    public void setInX(double[] inX) {
+        this.inX = inX;
     }
 
     public double[] getInY() {

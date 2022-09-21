@@ -1,11 +1,13 @@
 package ua.anastasiia.charts.info;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Columns implements Comparable<Columns>{
+public class Columns implements Comparable<Columns>, Serializable {
+    private static final long serialVersionUID = 1L;
     private String region;
     private int year;
     private int month;
@@ -13,15 +15,6 @@ public class Columns implements Comparable<Columns>{
     private Double temperature;
     private String windDirection;
     private Double windSpeed;
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public int getDayTime() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddHHmm");
-        return Integer.parseInt(date.format(formatter));
-    }
 
     public Columns(String region, int year, int month, LocalDateTime date, Double temperature, String windDirection, Double windSpeed) {
         this.region = region;
@@ -34,6 +27,11 @@ public class Columns implements Comparable<Columns>{
     }
 
     public Columns() {
+    }
+
+    public int getDayTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddHHmm");
+        return Integer.parseInt(date.format(formatter));
     }
 
     public int getDay() {
@@ -54,6 +52,10 @@ public class Columns implements Comparable<Columns>{
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     public int getYear() {

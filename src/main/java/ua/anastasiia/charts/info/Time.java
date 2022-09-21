@@ -45,6 +45,7 @@ public class Time extends ErrorsFixer {
     }
 
     @Override
-    protected void changeToInterpolated(DataSet set, Columns row, int j) {}
+    protected void changeToInterpolated(DataSet set, Columns row, int j) {
+    }
 
 }
